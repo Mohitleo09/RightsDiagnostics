@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { safeJsonParse } from '../../../utils/apiUtils';
-import { isValidPrice } from '../../utils/priceUtils';
+import { isValidPrice } from '../../../utils/priceUtils';
 
 const AddTest = ({ onClose, onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -22,7 +22,7 @@ const AddTest = ({ onClose, onSubmit }) => {
         setLoading(true);
         const response = await fetch('/api/organs');
         const result = await safeJsonParse(response);
-        
+
         if (result.success) {
           // Filter only active organs
           const activeOrgans = result.data.filter(organ => organ.status === 'Active');
@@ -63,28 +63,28 @@ const AddTest = ({ onClose, onSubmit }) => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.testName.trim()) {
       newErrors.testName = 'Test name is required';
     }
-    
+
     if (!formData.organ) {
       newErrors.organ = 'Please select an organ';
     }
-    
+
     if (!formData.price || !formData.price.trim()) {
       newErrors.price = 'Price is required';
     } else if (!isValidPrice(formData.price)) {
       newErrors.price = 'Price must be a number or range (e.g., 200 or 200-300)';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     if (validateForm()) {
       // Call parent submit handler
       if (onSubmit) {
@@ -95,7 +95,7 @@ const AddTest = ({ onClose, onSubmit }) => {
           status: formData.status
         });
       }
-      
+
       // Reset form
       setFormData({ testName: '', organ: '', price: '', status: 'Active' });
     }
@@ -130,11 +130,10 @@ const AddTest = ({ onClose, onSubmit }) => {
               value={formData.testName}
               onChange={handleTestNameChange}
               placeholder="Enter test name"
-              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${
-                errors.testName
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${errors.testName
                   ? 'border-red-500 focus:ring-red-500'
                   : 'border-gray-300 focus:ring-[#007AFF] focus:border-[#007AFF]'
-              }`}
+                }`}
             />
             {errors.testName && (
               <p className="text-red-500 text-sm mt-2">{errors.testName}</p>
@@ -155,11 +154,10 @@ const AddTest = ({ onClose, onSubmit }) => {
                 id="organ"
                 value={formData.organ}
                 onChange={handleOrganChange}
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${
-                  errors.organ
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${errors.organ
                     ? 'border-red-500 focus:ring-red-500'
                     : 'border-gray-300 focus:ring-[#007AFF] focus:border-[#007AFF]'
-                }`}
+                  }`}
               >
                 <option value="">Select an organ</option>
                 {organs.map((organ) => (
@@ -185,11 +183,10 @@ const AddTest = ({ onClose, onSubmit }) => {
               value={formData.price}
               onChange={handlePriceChange}
               placeholder="Enter price (e.g., 500 or 200-300)"
-              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${
-                errors.price
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${errors.price
                   ? 'border-red-500 focus:ring-red-500'
                   : 'border-gray-300 focus:ring-[#007AFF] focus:border-[#007AFF]'
-              }`}
+                }`}
             />
             {errors.price && (
               <p className="text-red-500 text-sm mt-2">{errors.price}</p>
@@ -210,11 +207,10 @@ const AddTest = ({ onClose, onSubmit }) => {
                   setErrors({ ...errors, status: '' });
                 }
               }}
-              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${
-                errors.status
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${errors.status
                   ? 'border-red-500 focus:ring-red-500'
                   : 'border-gray-300 focus:ring-[#007AFF] focus:border-[#007AFF]'
-              }`}
+                }`}
             >
               <option value="Active">Active</option>
               <option value="Inactive">Inactive</option>

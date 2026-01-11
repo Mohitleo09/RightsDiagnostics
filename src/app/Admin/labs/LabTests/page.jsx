@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import AddTest from './addtest';
 import AddOrgan from './addorgan';
 import AddSymptom from './addsymptom';
-import { isValidPrice } from '../../utils/priceUtils';
+import { isValidPrice } from '../../../utils/priceUtils';
 
 import { safeJsonParse } from '../../../utils/apiUtils';
 
@@ -61,8 +61,8 @@ const ViewTestModal = ({ test, vendors, onClose }) => {
           <div>
             <label className="block text-sm font-semibold text-gray-500 mb-2">Status</label>
             <span className={`px-4 py-2 inline-flex text-sm leading-5 font-semibold rounded-full ${test.status === 'Active'
-                ? 'bg-green-100 text-green-800'
-                : 'bg-red-100 text-red-800'
+              ? 'bg-green-100 text-green-800'
+              : 'bg-red-100 text-red-800'
               }`}>
               {test.status}
             </span>
@@ -234,8 +234,8 @@ const EditTestForm = ({ test, onClose, onSubmit }) => {
               onChange={handleNameChange}
               placeholder="Enter test name"
               className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${errors.testName
-                  ? 'border-red-500 focus:ring-red-500'
-                  : 'border-gray-300 focus:ring-[#007AFF] focus:border-[#007AFF]'
+                ? 'border-red-500 focus:ring-red-500'
+                : 'border-gray-300 focus:ring-[#007AFF] focus:border-[#007AFF]'
                 }`}
             />
             {errors.testName && (
@@ -255,8 +255,8 @@ const EditTestForm = ({ test, onClose, onSubmit }) => {
               onChange={handlePriceChange}
               placeholder="Enter price (e.g., 500 or 200-300)"
               className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${errors.price
-                  ? 'border-red-500 focus:ring-red-500'
-                  : 'border-gray-300 focus:ring-[#007AFF] focus:border-[#007AFF]'
+                ? 'border-red-500 focus:ring-red-500'
+                : 'border-gray-300 focus:ring-[#007AFF] focus:border-[#007AFF]'
                 }`}
             />
             {errors.price && (
@@ -279,8 +279,8 @@ const EditTestForm = ({ test, onClose, onSubmit }) => {
                 }
               }}
               className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${errors.status
-                  ? 'border-red-500 focus:ring-red-500'
-                  : 'border-gray-300 focus:ring-[#007AFF] focus:border-[#007AFF]'
+                ? 'border-red-500 focus:ring-red-500'
+                : 'border-gray-300 focus:ring-[#007AFF] focus:border-[#007AFF]'
                 }`}
             >
               <option value="Active">Active</option>
@@ -1298,8 +1298,8 @@ const EditOrganForm = ({ organ, onClose, onSubmit }) => {
               onChange={handleNameChange}
               placeholder="Enter organ name"
               className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${errors.organName
-                  ? 'border-red-500 focus:ring-red-500'
-                  : 'border-gray-300 focus:ring-[#007AFF] focus:border-[#007AFF]'
+                ? 'border-red-500 focus:ring-red-500'
+                : 'border-gray-300 focus:ring-[#007AFF] focus:border-[#007AFF]'
                 }`}
             />
             {errors.organName && (
@@ -1322,8 +1322,8 @@ const EditOrganForm = ({ organ, onClose, onSubmit }) => {
                 }
               }}
               className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${errors.status
-                  ? 'border-red-500 focus:ring-red-500'
-                  : 'border-gray-300 focus:ring-[#007AFF] focus:border-[#007AFF]'
+                ? 'border-red-500 focus:ring-red-500'
+                : 'border-gray-300 focus:ring-[#007AFF] focus:border-[#007AFF]'
                 }`}
             >
               <option value="Active">Active</option>
@@ -1454,8 +1454,8 @@ const ViewSymptomModal = ({ symptom, onClose }) => {
           <div>
             <label className="block text-sm font-semibold text-gray-500 mb-2">Status</label>
             <span className={`px-4 py-2 inline-flex text-sm leading-5 font-semibold rounded-full ${symptom.status === 'Active'
-                ? 'bg-green-100 text-green-800'
-                : 'bg-red-100 text-red-800'
+              ? 'bg-green-100 text-green-800'
+              : 'bg-red-100 text-red-800'
               }`}>
               {symptom.status}
             </span>
@@ -1630,8 +1630,8 @@ const EditSymptomForm = ({ symptom, onClose, onSubmit, organs }) => {
               onChange={handleSymptomNameChange}
               placeholder="Enter symptom name"
               className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${errors.symptomName
-                  ? 'border-red-500 focus:ring-red-500'
-                  : 'border-gray-300 focus:ring-[#007AFF] focus:border-[#007AFF]'
+                ? 'border-red-500 focus:ring-red-500'
+                : 'border-gray-300 focus:ring-[#007AFF] focus:border-[#007AFF]'
                 }`}
             />
             {errors.symptomName && (
@@ -1654,8 +1654,8 @@ const EditSymptomForm = ({ symptom, onClose, onSubmit, organs }) => {
                 }
               }}
               className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${errors.organ
-                  ? 'border-red-500 focus:ring-red-500'
-                  : 'border-gray-300 focus:ring-[#007AFF] focus:border-[#007AFF]'
+                ? 'border-red-500 focus:ring-red-500'
+                : 'border-gray-300 focus:ring-[#007AFF] focus:border-[#007AFF]'
                 }`}
             >
               <option value="">Select an organ</option>

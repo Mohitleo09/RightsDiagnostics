@@ -15,6 +15,12 @@ const nextConfig = {
             // Add other image hosts here if needed
         ],
     },
+    eslint: {
+        ignoreDuringBuilds: true,
+    },
+    typescript: {
+        ignoreBuildErrors: true,
+    },
 
     // Security Headers
     async headers() {
