@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { loginAction } from '@/app/serverActions/loginAction';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
@@ -8,7 +8,7 @@ import { signOut, useSession } from 'next-auth/react';
 import { motion } from 'framer-motion';
 import { Mail, Lock, ArrowRight, Loader2, AlertCircle, Building2 } from 'lucide-react';
 
-export default function VendorLoginPage() {
+function VendorLoginPageContent() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -217,5 +217,17 @@ export default function VendorLoginPage() {
         </div>
       </motion.div>
     </div>
+  );
+}
+
+export default function VendorLoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    }>
+      <VendorLoginPageContent />
+    </Suspense>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import {
   Check,
@@ -15,7 +15,7 @@ import Footer from '../../Footer/page';
 import { withAuth, isAuthenticated, showAuthModal } from '../../../utils/authGuard';
 import AdvertisementBanner from '../../../components/AdvertisementBanner';
 
-function PackageContent() {
+function PackageContentInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [packageName, setPackageName] = useState('');
@@ -1462,10 +1462,10 @@ function PackageContent() {
                     {[1, 2, 3].map((step) => (
                       <React.Fragment key={step}>
                         <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all ${step < currentStep
-                            ? 'bg-green-500 text-white'
-                            : step === currentStep
-                              ? 'bg-[#007AFF] text-white'
-                              : 'bg-gray-200 text-gray-400'
+                          ? 'bg-green-500 text-white'
+                          : step === currentStep
+                            ? 'bg-[#007AFF] text-white'
+                            : 'bg-gray-200 text-gray-400'
                           }`}>
                           {step < currentStep ? (
                             <Check className="w-5 h-5" />
@@ -1553,10 +1553,10 @@ function PackageContent() {
                             onClick={() => !slot.isPast && setSelectedTime(slot.value)}
                             disabled={slot.isPast}
                             className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${slot.isPast
-                                ? 'bg-gray-100 text-gray-400 border-gray-300 cursor-not-allowed'
-                                : selectedTime === slot.value
-                                  ? 'bg-[#007AFF] text-white border-[#007AFF] shadow-md'
-                                  : 'bg-white text-gray-700 border-gray-300 hover:border-[#0052FF] hover:bg-[#00CCFF]'
+                              ? 'bg-gray-100 text-gray-400 border-gray-300 cursor-not-allowed'
+                              : selectedTime === slot.value
+                                ? 'bg-[#007AFF] text-white border-[#007AFF] shadow-md'
+                                : 'bg-white text-gray-700 border-gray-300 hover:border-[#0052FF] hover:bg-[#00CCFF]'
                               }`}
                           >
                             {slot.label}
@@ -1574,10 +1574,10 @@ function PackageContent() {
                             onClick={() => !slot.isPast && setSelectedTime(slot.value)}
                             disabled={slot.isPast}
                             className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${slot.isPast
-                                ? 'bg-gray-100 text-gray-400 border-gray-300 cursor-not-allowed'
-                                : selectedTime === slot.value
-                                  ? 'bg-[#007AFF] text-white border-[#007AFF] shadow-md'
-                                  : 'bg-white text-gray-700 border-gray-300 hover:border-[#0052FF] hover:bg-[#00CCFF]'
+                              ? 'bg-gray-100 text-gray-400 border-gray-300 cursor-not-allowed'
+                              : selectedTime === slot.value
+                                ? 'bg-[#007AFF] text-white border-[#007AFF] shadow-md'
+                                : 'bg-white text-gray-700 border-gray-300 hover:border-[#0052FF] hover:bg-[#00CCFF]'
                               }`}
                           >
                             {slot.label}
@@ -1595,10 +1595,10 @@ function PackageContent() {
                             onClick={() => !slot.isPast && setSelectedTime(slot.value)}
                             disabled={slot.isPast}
                             className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${slot.isPast
-                                ? 'bg-gray-100 text-gray-400 border-gray-300 cursor-not-allowed'
-                                : selectedTime === slot.value
-                                  ? 'bg-[#007AFF] text-white border-[#007AFF] shadow-md'
-                                  : 'bg-white text-gray-700 border-gray-300 hover:border-[#0052FF] hover:bg-[#00CCFF]'
+                              ? 'bg-gray-100 text-gray-400 border-gray-300 cursor-not-allowed'
+                              : selectedTime === slot.value
+                                ? 'bg-[#007AFF] text-white border-[#007AFF] shadow-md'
+                                : 'bg-white text-gray-700 border-gray-300 hover:border-[#0052FF] hover:bg-[#00CCFF]'
                               }`}
                           >
                             {slot.label}
@@ -1966,4 +1966,14 @@ function PackageContent() {
   );
 }
 
-export default PackageContent;
+export default function PackageContent() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    }>
+      <PackageContentInner />
+    </Suspense>
+  );
+}
