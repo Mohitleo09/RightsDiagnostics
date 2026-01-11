@@ -22,7 +22,7 @@
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.23.24",
     "intro.js": "^7.2.0",
-    "jspdf": "^3.0.3",
+    "jspdf": "^4.0.0",
     "lucide-react": "^0.545.0",
     "mongoose": "^8.19.1",
     "next": "^16.1.1",
