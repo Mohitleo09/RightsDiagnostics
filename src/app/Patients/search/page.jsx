@@ -1,16 +1,16 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Search, TestTube, Building, ChevronRight } from 'lucide-react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Navbar from '../page';
 import Footer from '../Footer/page';
 
-const SearchResultsPage = () => {
+const SearchResultsPageContent = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const query = searchParams.get('q') || '';
-  
+
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -28,10 +28,10 @@ const SearchResultsPage = () => {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await fetch(`/api/search?q=${encodeURIComponent(searchQuery)}&page=${page}&limit=10`);
       const data = await response.json();
-      
+
       if (data.success) {
         setResults(data.results);
         setTotalCount(data.totalCount);
@@ -67,7 +67,7 @@ const SearchResultsPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navbar />
-      
+
       <div className="flex-1 bg-gray-50">
         {/* Header */}
         <div className="bg-white shadow-sm">
@@ -95,7 +95,7 @@ const SearchResultsPage = () => {
           ) : error ? (
             <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
               <p className="text-red-700">{error}</p>
-              <button 
+              <button
                 onClick={() => fetchSearchResults(query, currentPage)}
                 className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
               >
@@ -111,11 +111,11 @@ const SearchResultsPage = () => {
                       Found {totalCount} result{totalCount !== 1 ? 's' : ''} for "{query}"
                     </p>
                   </div>
-                  
+
                   <div className="grid gap-6">
                     {results.map((item, index) => (
-                      <div 
-                        key={index} 
+                      <div
+                        key={index}
                         className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow"
                       >
                         {item.type === 'test' ? (
@@ -142,7 +142,7 @@ const SearchResultsPage = () => {
                                   <p className="text-lg font-bold text-[#0052FF]">₹{item.price || 'N/A'}</p>
                                   <p className="text-sm text-gray-500">Offered by {item.vendorName || 'Unknown Lab'}</p>
                                 </div>
-                                <button 
+                                <button
                                   onClick={() => handleViewTestDetails(item)}
                                   className="flex items-center gap-2 text-[#0052FF] font-semibold hover:text-[#0052FF] transition-colors"
                                 >
@@ -170,7 +170,7 @@ const SearchResultsPage = () => {
                                     {item.phone ? `📞 ${item.phone}` : 'Phone not available'}
                                   </p>
                                 </div>
-                                <button 
+                                <button
                                   onClick={() => handleViewLab(item)}
                                   className="flex items-center gap-2 text-[#0052FF] font-semibold hover:text-[#0052FF] transition-colors"
                                 >
@@ -184,22 +184,21 @@ const SearchResultsPage = () => {
                       </div>
                     ))}
                   </div>
-                  
+
                   {/* Pagination */}
                   {totalPages > 1 && (
                     <div className="flex justify-center items-center gap-2 mt-8">
                       <button
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1}
-                        className={`px-4 py-2 rounded-lg ${
-                          currentPage === 1 
-                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                        className={`px-4 py-2 rounded-lg ${currentPage === 1
+                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                             : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-                        }`}
+                          }`}
                       >
                         Previous
                       </button>
-                      
+
                       <div className="flex gap-1">
                         {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                           let pageNum;
@@ -212,31 +211,29 @@ const SearchResultsPage = () => {
                           } else {
                             pageNum = currentPage - 2 + i;
                           }
-                          
+
                           return (
                             <button
                               key={pageNum}
                               onClick={() => handlePageChange(pageNum)}
-                              className={`w-10 h-10 rounded-lg ${
-                                currentPage === pageNum
+                              className={`w-10 h-10 rounded-lg ${currentPage === pageNum
                                   ? 'bg-[#007AFF] text-white'
                                   : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-                              }`}
+                                }`}
                             >
                               {pageNum}
                             </button>
                           );
                         })}
                       </div>
-                      
+
                       <button
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={currentPage === totalPages}
-                        className={`px-4 py-2 rounded-lg ${
-                          currentPage === totalPages 
-                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                        className={`px-4 py-2 rounded-lg ${currentPage === totalPages
+                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                             : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-                        }`}
+                          }`}
                       >
                         Next
                       </button>
@@ -250,7 +247,7 @@ const SearchResultsPage = () => {
                   <p className="text-gray-600 mb-6">
                     We couldn't find any tests or labs matching "{query}". Try adjusting your search terms.
                   </p>
-                  <button 
+                  <button
                     onClick={() => window.history.back()}
                     className="px-6 py-3 bg-[#007AFF] text-white rounded-lg hover:bg-[#0052FF] transition-colors font-semibold"
                   >
@@ -262,10 +259,20 @@ const SearchResultsPage = () => {
           )}
         </div>
       </div>
-      
+
       <Footer />
     </div>
   );
 };
 
-export default SearchResultsPage;
+export default function SearchResultsPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    }>
+      <SearchResultsPageContent />
+    </Suspense>
+  );
+}
