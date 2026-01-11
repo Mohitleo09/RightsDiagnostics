@@ -1,35 +1,37 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 
 export default function Category() {
   const categories = [
-    { 
-      title: 'Men Health', 
-      price: '₹333', 
+    {
+      title: 'Men Health',
+      price: '₹333',
       image: '/Category/men.png',
       link: '/Patients/Category/men'
     },
-    { 
-      title: 'Women Health', 
-      price: '₹333', 
+    {
+      title: 'Women Health',
+      price: '₹333',
       image: '/Category/women.png',
       link: '/Patients/Category/women'
     },
-    { 
-      title: 'Kids Health', 
-      price: '₹333', 
+    {
+      title: 'Kids Health',
+      price: '₹333',
       image: '/Category/kids.png',
       link: '/Patients/Category/kids'
     },
-    { 
-      title: 'Couples Health', 
-      price: '₹333', 
+    {
+      title: 'Couples Health',
+      price: '₹333',
       image: '/Category/couples.png',
       link: '/Patients/Category/couples'
     },
-    { 
-      title: 'Elders Health', 
-      price: '₹333', 
+    {
+      title: 'Elders Health',
+      price: '₹333',
       image: '/Category/elders.png',
       link: '/Patients/Category/elders'
     },
@@ -47,15 +49,15 @@ export default function Category() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
           {categories.map((cat, index) => (
-            <Link 
+            <Link
               key={index}
               href={cat.link}
               className="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100 hover:border-[#00A3FF] hover:-translate-y-1 block"
             >
               <div className="aspect-[16/11] w-full bg-gray-100">
-                <img 
-                  src={cat.image} 
-                  alt={cat.title} 
+                <img
+                  src={cat.image}
+                  alt={cat.title}
                   className="w-full h-full object-cover"
                   onError={(e) => {
                     e.target.src = '/placeholder-category.png';
