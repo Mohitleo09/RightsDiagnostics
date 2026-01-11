@@ -137,14 +137,28 @@ const UserLogin = () => {
       }
 
       // Use NextAuth credentials provider
-      const result = await signIn('credentials', {
-        email: emailValue,
-        password: credentials.password,
-        redirect: false
-      });
+      let result;
+      try {
+        result = await signIn('credentials', {
+          email: emailValue,
+          password: credentials.password,
+          redirect: false
+        });
+      } catch (signInError) {
+        // NextAuth v5 throws on 401/Invalid Credentials
+        console.error("SignIn threw error:", signInError);
+        const errorMessage = signInError.message || "";
+        if (errorMessage.includes("Read more at") || errorMessage.includes("Not authenticated")) {
+          toast.error("Invalid email or password");
+        } else {
+          toast.error("Authentication failed. Please try again.");
+        }
+        setLoading(false);
+        return;
+      }
 
       if (result?.error) {
-        toast.error(result.error);
+        toast.error("Invalid email or password");
       } else {
         // Handle "Remember Me" functionality
         if (rememberMe) {

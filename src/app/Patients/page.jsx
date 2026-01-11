@@ -44,6 +44,8 @@ const Navbar = () => {
         console.error('Error parsing user object:', e);
       }
     }
+    const legacyDefault = 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400';
+    if (finalProfileImage === legacyDefault) finalProfileImage = '';
     return { isLoggedIn: userLoggedIn, userName: finalUserName, profileImage: finalProfileImage };
   };
 

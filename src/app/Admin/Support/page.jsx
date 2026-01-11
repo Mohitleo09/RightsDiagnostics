@@ -528,13 +528,18 @@ const SupportPage = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-full bg-gray-50/50">
-        <div className="flex flex-col items-center p-8 bg-white rounded-2xl shadow-sm">
+      <div className="flex items-center justify-center h-full bg-gray-50/50 backdrop-blur-sm">
+        <div className="flex flex-col items-center justify-center">
           <div className="relative">
-            <div className="h-12 w-12 rounded-xl bg-indigo-50 animate-pulse"></div>
-            <RefreshCw className="absolute inset-0 m-auto h-6 w-6 text-indigo-600 animate-spin" />
+            <div className="absolute inset-0 h-16 w-16 bg-indigo-100/50 rounded-full blur-2xl animate-pulse"></div>
+            <div className="relative h-12 w-12 bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-indigo-50 flex items-center justify-center transform hover:scale-105 transition-transform duration-500">
+              <RefreshCw className="h-5 w-5 text-indigo-600 animate-spin" strokeWidth={2.5} />
+            </div>
           </div>
-          <p className="mt-4 text-sm font-medium text-slate-600">Syncing messages...</p>
+          <div className="mt-6 flex flex-col items-center space-y-1.5">
+            <h3 className="text-sm font-semibold text-slate-900 tracking-tight">Syncing Messages</h3>
+            <p className="text-xs font-medium text-slate-400 animate-pulse">Please wait...</p>
+          </div>
         </div>
       </div>
     );
@@ -586,8 +591,8 @@ const SupportPage = () => {
                   setActiveCategory(category.id);
                 }}
                 className={`w-full group flex items-center px-3.5 py-3 rounded-xl transition-all duration-300 ease-out ${isActive
-                    ? 'bg-slate-900 text-white shadow-md shadow-slate-200 scale-[1.02]'
-                    : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+                  ? 'bg-slate-900 text-white shadow-md shadow-slate-200 scale-[1.02]'
+                  : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
                   } ${sidebarCollapsed ? 'justify-center px-0' : ''}`}
               >
                 <div className={`relative flex items-center ${sidebarCollapsed ? 'justify-center' : ''}`}>
@@ -605,8 +610,8 @@ const SupportPage = () => {
 
                   {!sidebarCollapsed && category.count > 0 && (
                     <span className={`ml-auto text-xs font-bold py-0.5 px-2 rounded-full transition-colors ${isActive
-                        ? 'bg-white/20 text-white'
-                        : 'bg-slate-100 text-slate-600 group-hover:bg-slate-200'
+                      ? 'bg-white/20 text-white'
+                      : 'bg-slate-100 text-slate-600 group-hover:bg-slate-200'
                       }`}>
                       {category.count}
                     </span>
@@ -682,8 +687,8 @@ const SupportPage = () => {
                     key={message.id}
                     onClick={() => handleSelectMessage(message)}
                     className={`group relative p-4 rounded-xl cursor-pointer transition-all duration-200 border border-transparent ${isSelected
-                        ? 'bg-white shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] border-slate-100 z-10'
-                        : 'hover:bg-white hover:shadow-sm hover:border-slate-50'
+                      ? 'bg-white shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] border-slate-100 z-10'
+                      : 'hover:bg-white hover:shadow-sm hover:border-slate-50'
                       } ${isUnread ? 'bg-slate-50/50' : ''}`}
                   >
                     {isUnread && (
@@ -773,8 +778,8 @@ const SupportPage = () => {
                 <button
                   onClick={() => selectedMessage.archived ? handleUnarchiveMessage(selectedMessage.id) : handleArchiveMessage(selectedMessage.id)}
                   className={`p-2 rounded-lg transition-all ${selectedMessage.archived
-                      ? 'bg-indigo-50 text-indigo-600'
-                      : 'text-slate-400 hover:text-indigo-600 hover:bg-slate-50'
+                    ? 'bg-indigo-50 text-indigo-600'
+                    : 'text-slate-400 hover:text-indigo-600 hover:bg-slate-50'
                     }`}
                   title={selectedMessage.archived ? "Unarchive" : "Archive"}
                 >

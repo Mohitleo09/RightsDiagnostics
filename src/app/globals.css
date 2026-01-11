@@ -403,7 +403,7 @@ body {
   color: var(--deep-black);
   font-size: 0.85rem;
   outline: none;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .formSection input::placeholder {
@@ -435,7 +435,7 @@ body {
   cursor: pointer;
   padding: 6px;
   border-radius: 8px;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   z-index: 10;
 }
 
@@ -449,7 +449,7 @@ body {
   width: 18px;
   height: 18px;
   color: var(--deep-black);
-  transition: color 0.3s ease;
+  transition: color 0.2s ease;
 }
 
 .formSection .relative button:hover svg {
@@ -469,7 +469,7 @@ body {
   font-size: 0.85rem;
   letter-spacing: 0.025em;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   text-transform: uppercase;
   position: relative;
   overflow: hidden;
@@ -486,7 +486,7 @@ body {
       transparent,
       rgba(255, 255, 255, 0.15),
       transparent);
-  transition: left 0.6s ease;
+  transition: left 0.3s ease;
 }
 
 .formSection button[type="submit"]:hover::before {

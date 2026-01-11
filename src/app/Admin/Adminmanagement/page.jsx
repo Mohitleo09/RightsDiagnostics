@@ -283,9 +283,6 @@ const AdminManagement = () => {
       const updatedModules = prevModules.map(module =>
         module.id === moduleId ? { ...module, enabled: !module.enabled } : module
       );
-      if (!updatedModules.some(m => m.id === 'support')) {
-        updatedModules.push({ id: 'support', label: 'Support', enabled: true });
-      }
       saveModulesToDatabase('admin', updatedModules);
       localStorage.setItem('adminModules', JSON.stringify(updatedModules));
       if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('adminModulesUpdated', { detail: { modules: updatedModules } }));
@@ -298,9 +295,6 @@ const AdminManagement = () => {
       const updatedModules = prevModules.map(module =>
         module.id === moduleId ? { ...module, enabled: !module.enabled } : module
       );
-      if (!updatedModules.some(m => m.id === 'admin-management')) {
-        updatedModules.push({ id: 'admin-management', label: 'Admin Management', enabled: true });
-      }
       saveModulesToDatabase('support', updatedModules);
       localStorage.setItem('supportModules', JSON.stringify(updatedModules));
       if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('supportModulesUpdated', { detail: { modules: updatedModules } }));
@@ -404,8 +398,8 @@ const AdminManagement = () => {
                 {/* User Profile Info */}
                 <div className="flex items-center gap-4 min-w-[30%]">
                   <div className={`w-12 h-12 rounded-[18px] flex items-center justify-center text-lg font-extrabold ${admin.role === 'superadmin' ? 'bg-purple-50 text-purple-600' :
-                      admin.role === 'admin' ? 'bg-blue-50 text-blue-600' :
-                        'bg-emerald-50 text-emerald-600'
+                    admin.role === 'admin' ? 'bg-blue-50 text-blue-600' :
+                      'bg-emerald-50 text-emerald-600'
                     }`}>
                     {admin.username.charAt(0).toUpperCase()}
                   </div>
@@ -421,8 +415,8 @@ const AdminManagement = () => {
                 {/* Role Badge */}
                 <div className="flex items-center gap-2 min-w-[20%] mt-4 md:mt-0">
                   <span className={`px-4 py-1.5 rounded-full text-xs font-bold tracking-wide uppercase ${admin.role === 'superadmin' ? 'bg-purple-100 text-purple-700' :
-                      admin.role === 'admin' ? 'bg-blue-100 text-blue-700' :
-                        'bg-emerald-100 text-emerald-700'
+                    admin.role === 'admin' ? 'bg-blue-100 text-blue-700' :
+                      'bg-emerald-100 text-emerald-700'
                     }`}>
                     {admin.role}
                   </span>

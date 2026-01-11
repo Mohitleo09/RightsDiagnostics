@@ -191,9 +191,16 @@ const AdminPage = ({ children }) => {
 
     if (userRole === 'admin') {
       const enabledModuleIds = adminModules.filter(module => module.enabled).map(module => module.id);
-      if (enabledModuleIds.length === 0) return navItems;
+
+      // If no modules are enabled, show nothing except dashboard (safety fallback)
+      if (enabledModuleIds.length === 0) return navItems.filter(item => item.id === 'dashboard');
+
       return navItems.filter(item => {
         if (item.id === 'dashboard') return true;
+        // Direct ID matching + Special casing for 'Admin Management' which is dynamically inserted
+        if (item.id === 'support' && enabledModuleIds.includes('support')) return true;
+
+        // Map nav item IDs to permission module IDs if they differ
         const moduleIdMap = {
           'vendors-management': 'vendors-management',
           'category': 'category',
@@ -202,20 +209,22 @@ const AdminPage = ({ children }) => {
           'coupons': 'coupons',
           'advertisements': 'advertisements',
           'analytics': 'analytics',
-          'admin-management': 'admin-management',
           'support': 'support'
         };
-        const moduleId = moduleIdMap[item.id];
-        if (!moduleId) return true;
-        return enabledModuleIds.includes(moduleId);
+
+        const mappedId = moduleIdMap[item.id] || item.id;
+        return enabledModuleIds.includes(mappedId);
       });
     }
 
     if (userRole === 'support') {
       const enabledModuleIds = supportModules.filter(module => module.enabled).map(module => module.id);
-      if (enabledModuleIds.length === 0) return navItems;
+
+      if (enabledModuleIds.length === 0) return navItems.filter(item => item.id === 'dashboard');
+
       return navItems.filter(item => {
         if (item.id === 'dashboard') return true;
+
         const moduleIdMap = {
           'vendors-management': 'vendors-management',
           'category': 'category',
@@ -226,9 +235,9 @@ const AdminPage = ({ children }) => {
           'analytics': 'analytics',
           'support': 'support'
         };
-        const moduleId = moduleIdMap[item.id];
-        if (!moduleId) return true;
-        return enabledModuleIds.includes(moduleId);
+
+        const mappedId = moduleIdMap[item.id] || item.id;
+        return enabledModuleIds.includes(mappedId);
       });
     }
 

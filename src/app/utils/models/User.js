@@ -90,7 +90,7 @@ const UserSchema = new mongoose.Schema({
   profileImage: {
     type: String,
     required: false,
-    default: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400',
+    default: '',
   },
   walletBalance: {
     type: Number,

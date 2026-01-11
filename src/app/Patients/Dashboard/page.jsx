@@ -123,9 +123,10 @@ export default function PatientsDashboard() {
     // Initialize profile image from localStorage
     const cachedProfileImage = typeof window !== 'undefined' ? localStorage.getItem('userProfileImage') : null;
     if (cachedProfileImage) {
+      const legacyDefault = 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400';
       setForm(prevForm => ({
         ...prevForm,
-        profileImage: cachedProfileImage
+        profileImage: cachedProfileImage === legacyDefault ? '' : cachedProfileImage
       }));
     }
   }, []);
@@ -201,7 +202,7 @@ export default function PatientsDashboard() {
 
             // Set basic user data from session
             const sessionUserName = sessionData.user.name || sessionData.user.username || 'User';
-            const sessionProfileImage = sessionData.user.image || sessionData.user.profileImage || 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400';
+            const sessionProfileImage = sessionData.user.image || sessionData.user.profileImage || '';
 
             setUserName(sessionUserName);
             setForm(prev => ({
@@ -267,7 +268,7 @@ export default function PatientsDashboard() {
         const storedUserName = typeof window !== 'undefined' ? (localStorage.getItem('userName') || 'User') : 'User';
         const storedUserEmail = typeof window !== 'undefined' ? (localStorage.getItem('userEmail') || '') : '';
         const storedUserPhone = typeof window !== 'undefined' ? (localStorage.getItem('userPhone') || '') : '';
-        const storedProfileImage = typeof window !== 'undefined' ? (localStorage.getItem('userProfileImage') || 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400') : 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400';
+        const storedProfileImage = typeof window !== 'undefined' ? (localStorage.getItem('userProfileImage') || '') : '';
 
         // Try to get user data from localStorage user object
         let userData = null;
@@ -312,7 +313,9 @@ export default function PatientsDashboard() {
 
         if (data.success && data.user) {
           const username = data.user.username || data.user.name || 'User';
-          const profileImage = data.user.profileImage || 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400';
+          const legacyDefault = 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400';
+          let profileImage = data.user.profileImage || '';
+          if (profileImage === legacyDefault) profileImage = '';
 
           console.log('✅ Profile loaded successfully from database:', username);
 
@@ -450,7 +453,7 @@ export default function PatientsDashboard() {
             } catch (e) {
               console.error('❌ Error parsing cached profile:', e);
               const storedUserName = typeof window !== 'undefined' ? (localStorage.getItem('userName') || 'User') : 'User';
-              const storedProfileImage = typeof window !== 'undefined' ? (localStorage.getItem('userProfileImage') || 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400') : 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400';
+              const storedProfileImage = typeof window !== 'undefined' ? (localStorage.getItem('userProfileImage') || '') : '';
               setUserName(storedUserName);
               setForm({
                 name: storedUserName,
@@ -463,7 +466,7 @@ export default function PatientsDashboard() {
             }
           } else {
             const storedUserName = typeof window !== 'undefined' ? (localStorage.getItem('userName') || 'User') : 'User';
-            const storedProfileImage = typeof window !== 'undefined' ? (localStorage.getItem('userProfileImage') || 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400') : 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400';
+            const storedProfileImage = typeof window !== 'undefined' ? (localStorage.getItem('userProfileImage') || '') : '';
             setUserName(storedUserName);
             setForm({
               name: storedUserName,
@@ -489,7 +492,7 @@ export default function PatientsDashboard() {
           } catch (e) {
             console.error('❌ Error parsing cached profile:', e);
             const storedUserName = typeof window !== 'undefined' ? (localStorage.getItem('userName') || 'User') : 'User';
-            const storedProfileImage = typeof window !== 'undefined' ? (localStorage.getItem('userProfileImage') || 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400') : 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400';
+            const storedProfileImage = typeof window !== 'undefined' ? (localStorage.getItem('userProfileImage') || '') : '';
             setUserName(storedUserName);
             setForm({
               name: storedUserName,
@@ -502,7 +505,7 @@ export default function PatientsDashboard() {
           }
         } else {
           const storedUserName = typeof window !== 'undefined' ? (localStorage.getItem('userName') || 'User') : 'User';
-          const storedProfileImage = typeof window !== 'undefined' ? (localStorage.getItem('userProfileImage') || 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400') : 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400';
+          const storedProfileImage = typeof window !== 'undefined' ? (localStorage.getItem('userProfileImage') || '') : '';
           setUserName(storedUserName);
           setForm({
             name: storedUserName,
