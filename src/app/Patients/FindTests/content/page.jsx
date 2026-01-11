@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Navbar from '../../page';
 import Footer from '../../Footer/page';
@@ -41,7 +41,7 @@ const LabBadge = ({ text, type = "default" }) => {
   );
 };
 
-function FindTestsContent() {
+function FindTestsContentInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [testName, setTestName] = useState('');
@@ -389,4 +389,14 @@ function FindTestsContent() {
   );
 }
 
-export default FindTestsContent;
+export default function FindTestsContent() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    }>
+      <FindTestsContentInner />
+    </Suspense>
+  );
+}
