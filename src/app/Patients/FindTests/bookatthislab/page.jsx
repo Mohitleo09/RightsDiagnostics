@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, Suspense } from 'react';
 import { MapPin, Calendar, Clock, CheckCircle, Copy, ClipboardList, User, ChevronRight, ChevronLeft, ShieldCheck, Activity, CreditCard } from 'lucide-react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Navbar from '../../page';
 import Footer from '../../Footer/page';
 import { safeJsonParse } from '../../../utils/apiUtils';
 
-function BookAtThisLab() {
+function BookAtThisLabContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
@@ -693,4 +693,15 @@ function BookAtThisLab() {
   );
 }
 
-export default BookAtThisLab;
+export default function BookAtThisLab() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    }>
+      <BookAtThisLabContent />
+    </Suspense>
+  );
+}
+
