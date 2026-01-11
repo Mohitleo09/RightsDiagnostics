@@ -4,7 +4,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { MapPin, Calendar, Clock, CheckCircle, Copy, ClipboardList, User, ChevronRight, ChevronLeft, ShieldCheck, Activity, CreditCard } from 'lucide-react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Navbar from '../../page';
-import Footer from '../../footer/page';
+import Footer from '../../Footer/page';
 import { safeJsonParse } from '../../../utils/apiUtils';
 
 function BookAtThisLab() {

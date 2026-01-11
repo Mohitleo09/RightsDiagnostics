@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Navbar from '../page';
-import Footer from '../footer/page';
+import Footer from '../Footer/page';
 import { safeJsonParse } from '../../utils/apiUtils';
 import { withAuth } from '../../utils/authGuard';
 

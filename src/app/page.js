@@ -2,11 +2,11 @@
 
 import * as React from "react"
 import Navbar from './Patients/page'
-import Hero from './Patients/hero/page'
+import Hero from './Patients/Hero/page'
 import Category from './Patients/Category/page'
 import HowItWorks from './Patients/HowItWorks/page'
 import Packages from './Patients/packages/page'
-import Footer from './Patients/footer/page'
+import Footer from './Patients/Footer/page'
 
 export default function Home() {
   return (

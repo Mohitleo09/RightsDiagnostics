@@ -2,16 +2,16 @@
 
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { 
-  Check, 
-  CheckCircle, 
-  Copy, 
-  Calendar, 
+import {
+  Check,
+  CheckCircle,
+  Copy,
+  Calendar,
   Clock,
   X
 } from 'lucide-react';
 import Navbar from '../../page';
-import Footer from '../../footer/page';
+import Footer from '../../Footer/page';
 import { withAuth, isAuthenticated, showAuthModal } from '../../../utils/authGuard';
 import AdvertisementBanner from '../../../components/AdvertisementBanner';
 
@@ -25,7 +25,7 @@ function PackageContent() {
   const [faqs, setFaqs] = useState([]);
   const [expandedFaq, setExpandedFaq] = useState(null);
   const [activeSection, setActiveSection] = useState('overview');
-  
+
   // Booking workflow states
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
@@ -44,7 +44,7 @@ function PackageContent() {
   const [bookingConfirmed, setBookingConfirmed] = useState(false);
   const [bookingId, setBookingId] = useState('');
   const [couponCode, setCouponCode] = useState('');
-  
+
   // Function to handle smooth scrolling
   const scrollToSection = (sectionId) => {
     const section = document.getElementById(sectionId);
@@ -74,7 +74,7 @@ function PackageContent() {
 
     return () => sections.forEach(section => observer.unobserve(section));
   }, []);
-  
+
   // Function to generate FAQs based on package data
   const generateFaqs = (packageData) => {
     if (!packageData) return [];
@@ -128,7 +128,7 @@ function PackageContent() {
     const id = searchParams.get('packageId');
     if (name) setPackageName(name);
     if (id) setPackageId(id);
-    
+
     // Fetch package data
     fetchPackageData(id, name);
   }, [searchParams]);
@@ -144,23 +144,23 @@ function PackageContent() {
   const fetchPackageData = async (id, name) => {
     try {
       setIsLoading(true);
-      
-      const packageQuery = id 
+
+      const packageQuery = id
         ? `/api/packages?packageId=${encodeURIComponent(id)}`
-        : name 
-        ? `/api/packages?packageName=${encodeURIComponent(name)}`
-        : '/api/packages';
-      
+        : name
+          ? `/api/packages?packageName=${encodeURIComponent(name)}`
+          : '/api/packages';
+
       const response = await fetch(packageQuery);
       const data = await response.json();
-      
+
       if (data.success) {
-        const packageDetails = data.data && !Array.isArray(data.data) 
-          ? data.data 
-          : Array.isArray(data.data) 
-          ? data.data.find(pkg => pkg.packageName === name || pkg._id === id)
-          : null;
-        
+        const packageDetails = data.data && !Array.isArray(data.data)
+          ? data.data
+          : Array.isArray(data.data)
+            ? data.data.find(pkg => pkg.packageName === name || pkg._id === id)
+            : null;
+
         if (packageDetails) {
           setPackageData({
             ...packageDetails,
@@ -176,7 +176,7 @@ function PackageContent() {
       } else {
         console.error('API Error:', data.error);
       }
-      
+
       setIsLoading(false);
     } catch (error) {
       console.error('Error fetching package data:', error);
@@ -185,19 +185,19 @@ function PackageContent() {
   };
 
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  
+
   const handleBookPackage = () => {
     // Check if user is authenticated
     console.log('Book package button clicked');
     const authenticated = isAuthenticated();
     console.log('User authenticated:', authenticated);
-    
+
     if (!authenticated) {
       console.log('Showing auth modal');
       showAuthModal('Please log in or sign up to book this package');
       return;
     }
-    
+
     // Add package to cart
     if (typeof window !== 'undefined') {
       // Get user ID for cart key (same logic as in cart page)
@@ -205,13 +205,13 @@ function PackageContent() {
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         return user.id || user.email || user.phone || 'guest';
       };
-      
+
       const cartKey = `cart_${getUserID()}`;
       const cart = JSON.parse(localStorage.getItem(cartKey) || '[]');
-      
+
       // Check if package is already in cart
       const existingItemIndex = cart.findIndex(item => item.id === packageId);
-      
+
       if (existingItemIndex !== -1) {
         // If package is already in cart, show message
         console.log('Package already in cart');
@@ -223,7 +223,7 @@ function PackageContent() {
         if (Array.isArray(categoryValue)) {
           categoryValue = categoryValue.join(', ');
         }
-        
+
         const cartItem = {
           id: packageId,
           testName: packageName,
@@ -232,12 +232,12 @@ function PackageContent() {
           isPackage: true,
           quantity: 1
         };
-        
+
         cart.push(cartItem);
         localStorage.setItem(cartKey, JSON.stringify(cart));
         window.dispatchEvent(new Event('cartUpdated'));
         console.log('Package added to cart:', cartItem);
-        
+
         // Show success message on page
         setShowSuccessMessage(true);
         setTimeout(() => setShowSuccessMessage(false), 2000);
@@ -285,7 +285,7 @@ function PackageContent() {
       afternoon: [],
       evening: []
     };
-    
+
     const now = new Date();
     const currentDate = now.toISOString().split('T')[0];
     const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
@@ -293,14 +293,14 @@ function PackageContent() {
     for (let hour = 8; hour <= 20; hour++) {
       for (let min = 0; min < 60; min += 30) {
         if (hour === 20 && min > 0) break;
-        
+
         const time24 = `${String(hour).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
         const hour12 = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
         const ampm = hour >= 12 ? 'PM' : 'AM';
         const time12 = `${hour12}:${String(min).padStart(2, '0')} ${ampm}`;
-        
+
         const isPast = selectedDate === currentDate && time24 < currentTime;
-        
+
         if (hour >= 8 && hour < 12) {
           slots.morning.push({ value: time24, label: time12, isPast });
         } else if (hour >= 12 && hour < 17) {
@@ -362,10 +362,10 @@ function PackageContent() {
   const handleConfirmBooking = async () => {
     const newBookingId = generateBookingId();
     const newCouponCode = generateCouponCode();
-    
+
     setBookingId(newBookingId);
     setCouponCode(newCouponCode);
-    
+
     const bookingData = {
       bookingId: newBookingId,
       couponCode: newCouponCode,
@@ -390,7 +390,7 @@ function PackageContent() {
       status: 'Confirmed',
       isPackage: true
     };
-    
+
     try {
       const response = await fetch('/api/bookings', {
         method: 'POST',
@@ -399,12 +399,12 @@ function PackageContent() {
         },
         body: JSON.stringify(bookingData),
       });
-      
+
       const result = await response.json();
-      
+
       if (result.success) {
         setBookingConfirmed(true);
-        
+
         const localBooking = {
           id: newBookingId,
           bookingId: newBookingId,
@@ -423,7 +423,7 @@ function PackageContent() {
           createdAt: new Date().toISOString(),
           isPackage: true
         };
-        
+
         const existingBookings = JSON.parse(localStorage.getItem('upcomingBookings') || '[]');
         existingBookings.unshift(localBooking);
         localStorage.setItem('upcomingBookings', JSON.stringify(existingBookings));
@@ -1168,32 +1168,32 @@ function PackageContent() {
               }
             }
           `}</style>
-          
+
           <div className="content-container">
             <div className="content-grid">
               <aside className="sidebar-card">
                 <h3>Package Information</h3>
                 <nav>
                   <ul className="nav-list">
-                    <li 
+                    <li
                       className={activeSection === 'overview' ? 'active' : ''}
                       onClick={() => scrollToSection('overview')}
                     >
                       Overview
                     </li>
-                    <li 
+                    <li
                       className={activeSection === 'preparation' ? 'active' : ''}
                       onClick={() => scrollToSection('preparation')}
                     >
                       Package Preparation
                     </li>
-                    <li 
+                    <li
                       className={activeSection === 'importance' ? 'active' : ''}
                       onClick={() => scrollToSection('importance')}
                     >
                       Importance
                     </li>
-                    <li 
+                    <li
                       className={activeSection === 'tests' ? 'active' : ''}
                       onClick={() => scrollToSection('tests')}
                     >
@@ -1233,7 +1233,7 @@ function PackageContent() {
                 <h1 className="page-title">
                   {packageName || packageData?.packageName || 'Health Package'} <span className="highlight">Package</span>
                 </h1>
-                
+
                 {isLoading ? (
                   <>
                     <div className="skeleton-card">
@@ -1261,7 +1261,7 @@ function PackageContent() {
                       <h3>Overview</h3>
                       <p>{packageData.overview || 'Overview information not available.'}</p>
                     </section>
-                    
+
                     <section id="preparation" className="info-card scroll-mt-24">
                       <h3>Before Package Preparation / Precautions</h3>
                       {packageData.testPreparation && packageData.testPreparation.length > 0 ? (
@@ -1274,7 +1274,7 @@ function PackageContent() {
                         <p>No specific preparation instructions available.</p>
                       )}
                     </section>
-                    
+
                     <section id="importance" className="info-card scroll-mt-24">
                       <h3>Importance</h3>
                       {packageData.importance && packageData.importance.length > 0 ? (
@@ -1287,13 +1287,13 @@ function PackageContent() {
                         <p>Importance information not available.</p>
                       )}
                     </section>
-                    
+
                     <section id="tests" className="tests-section scroll-mt-24">
                       <h3>
                         Tests Included in this <span className="highlight">Package</span>
                       </h3>
                       <p className="tests-note">⚠️ Note: Package prices may vary depending on the laboratory.</p>
-                      
+
                       <div>
                         {packageData.includedTests && packageData.includedTests.length > 0 ? (
                           packageData.includedTests.map((test, index) => (
@@ -1305,8 +1305,8 @@ function PackageContent() {
                                 <strong>{test.testName || 'Test Name'}</strong>
                                 <div className="test-category">
                                   <span>Category:</span>{' '}
-                                  {Array.isArray(test.category) 
-                                    ? test.category.join(', ') 
+                                  {Array.isArray(test.category)
+                                    ? test.category.join(', ')
                                     : test.category || 'General'}
                                 </div>
                               </div>
@@ -1346,7 +1346,7 @@ function PackageContent() {
                     </button>
                   </div>
                 )}
-                
+
                 <div className="mt-8 text-center">
                   <button className="book-btn" onClick={handleBookPackage}>
                     <span>Book This Package</span>
@@ -1354,7 +1354,7 @@ function PackageContent() {
                       <path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" />
                     </svg>
                   </button>
-                  
+
                   {showSuccessMessage && (
                     <div className="mt-4 p-3 bg-green-100 text-green-700 rounded-lg flex items-center justify-center">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
@@ -1369,7 +1369,7 @@ function PackageContent() {
               <aside className="tips-card">
                 <section className="tips-section">
                   <h4>Stay Fit With Expert Tips</h4>
-                  
+
                   {packageData?.youtubeLinks && packageData.youtubeLinks.length > 0 ? (
                     <div className="youtube-videos-scroll">
                       {packageData.youtubeLinks.map((link, index) => {
@@ -1378,10 +1378,10 @@ function PackageContent() {
                           const match = url.match(regExp);
                           return match && match[2].length === 11 ? match[2] : null;
                         };
-                        
+
                         const videoId = getYouTubeId(link);
                         const thumbnailUrl = videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : null;
-                        
+
                         return (
                           <a
                             key={index}
@@ -1392,8 +1392,8 @@ function PackageContent() {
                           >
                             {thumbnailUrl && (
                               <>
-                                <img 
-                                  src={thumbnailUrl} 
+                                <img
+                                  src={thumbnailUrl}
                                   alt={`Video ${index + 1}: ${packageName || packageData?.packageName || 'Package'} Guide`}
                                   className="youtube-thumbnail"
                                   onError={(e) => {
@@ -1422,7 +1422,7 @@ function PackageContent() {
                     </div>
                   )}
                 </section>
-                
+
                 <section className="support-section">
                   <h4>Need Support</h4>
                   <p>Need Help? Contact our support team</p>
@@ -1445,14 +1445,14 @@ function PackageContent() {
               <h3 className="text-xl font-bold text-gray-900">
                 {currentStep === 4 && bookingConfirmed ? 'Booking Confirmed!' : 'Book Package'}
               </h3>
-              <button 
+              <button
                 onClick={handleCloseModal}
                 className="text-gray-400 hover:text-gray-500"
               >
                 <X className="w-6 h-6" />
               </button>
             </div>
-            
+
             {/* Modal Content */}
             <div className="p-6">
               {/* Progress Stepper */}
@@ -1461,13 +1461,12 @@ function PackageContent() {
                   <div className="flex items-center gap-2">
                     {[1, 2, 3].map((step) => (
                       <React.Fragment key={step}>
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
-                          step < currentStep
-                            ? 'bg-green-500 text-white' 
-                            : step === currentStep 
-                            ? 'bg-[#007AFF] text-white' 
-                            : 'bg-gray-200 text-gray-400'
-                        }`}>
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all ${step < currentStep
+                            ? 'bg-green-500 text-white'
+                            : step === currentStep
+                              ? 'bg-[#007AFF] text-white'
+                              : 'bg-gray-200 text-gray-400'
+                          }`}>
                           {step < currentStep ? (
                             <Check className="w-5 h-5" />
                           ) : (
@@ -1475,21 +1474,20 @@ function PackageContent() {
                           )}
                         </div>
                         {step < 3 && (
-                          <div className={`w-10 h-1 rounded-full ${
-                            step < currentStep ? 'bg-green-500' : 'bg-gray-200'
-                          }`}></div>
+                          <div className={`w-10 h-1 rounded-full ${step < currentStep ? 'bg-green-500' : 'bg-gray-200'
+                            }`}></div>
                         )}
                       </React.Fragment>
                     ))}
                   </div>
                 </div>
               )}
-              
+
               {/* Step 1: Confirm Selection */}
               {currentStep === 1 && (
                 <div>
                   <h2 className="text-lg font-bold text-gray-900 mb-4">Confirm Package Selection</h2>
-                  
+
                   <div className="bg-blue-50 border border-blue-100 rounded-xl p-5 mb-6">
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
@@ -1503,15 +1501,15 @@ function PackageContent() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center justify-end gap-3 pt-4">
-                    <button 
+                    <button
                       onClick={handleCloseModal}
                       className="px-5 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
                     >
                       Cancel
                     </button>
-                    <button 
+                    <button
                       onClick={handleContinue}
                       className="px-6 py-2.5 bg-[#007AFF] text-white font-semibold rounded-lg hover:bg-[#0052FF] transition-colors shadow-md"
                     >
@@ -1520,12 +1518,12 @@ function PackageContent() {
                   </div>
                 </div>
               )}
-              
+
               {/* Step 2: Select Date & Time */}
               {currentStep === 2 && (
                 <div>
                   <h2 className="text-lg font-bold text-gray-900 mb-4">Select Date & Time</h2>
-                  
+
                   <div className="mb-5">
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                       <Calendar className="w-4 h-4 inline mr-1" />
@@ -1545,7 +1543,7 @@ function PackageContent() {
                       <Clock className="w-4 h-4 inline mr-1" />
                       Select Time Slot
                     </label>
-                    
+
                     <div className="mb-4">
                       <h4 className="text-sm font-semibold text-gray-700 mb-2.5">Morning</h4>
                       <div className="grid grid-cols-4 gap-2">
@@ -1554,13 +1552,12 @@ function PackageContent() {
                             key={slot.value}
                             onClick={() => !slot.isPast && setSelectedTime(slot.value)}
                             disabled={slot.isPast}
-                            className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
-                              slot.isPast
+                            className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${slot.isPast
                                 ? 'bg-gray-100 text-gray-400 border-gray-300 cursor-not-allowed'
                                 : selectedTime === slot.value
-                                  ? 'bg-[#007AFF] text-white border-[#007AFF] shadow-md' 
+                                  ? 'bg-[#007AFF] text-white border-[#007AFF] shadow-md'
                                   : 'bg-white text-gray-700 border-gray-300 hover:border-[#0052FF] hover:bg-[#00CCFF]'
-                            }`}
+                              }`}
                           >
                             {slot.label}
                           </button>
@@ -1576,13 +1573,12 @@ function PackageContent() {
                             key={slot.value}
                             onClick={() => !slot.isPast && setSelectedTime(slot.value)}
                             disabled={slot.isPast}
-                            className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
-                              slot.isPast
+                            className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${slot.isPast
                                 ? 'bg-gray-100 text-gray-400 border-gray-300 cursor-not-allowed'
                                 : selectedTime === slot.value
-                                  ? 'bg-[#007AFF] text-white border-[#007AFF] shadow-md' 
+                                  ? 'bg-[#007AFF] text-white border-[#007AFF] shadow-md'
                                   : 'bg-white text-gray-700 border-gray-300 hover:border-[#0052FF] hover:bg-[#00CCFF]'
-                            }`}
+                              }`}
                           >
                             {slot.label}
                           </button>
@@ -1598,13 +1594,12 @@ function PackageContent() {
                             key={slot.value}
                             onClick={() => !slot.isPast && setSelectedTime(slot.value)}
                             disabled={slot.isPast}
-                            className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
-                              slot.isPast
+                            className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${slot.isPast
                                 ? 'bg-gray-100 text-gray-400 border-gray-300 cursor-not-allowed'
                                 : selectedTime === slot.value
-                                  ? 'bg-[#007AFF] text-white border-[#007AFF] shadow-md' 
+                                  ? 'bg-[#007AFF] text-white border-[#007AFF] shadow-md'
                                   : 'bg-white text-gray-700 border-gray-300 hover:border-[#0052FF] hover:bg-[#00CCFF]'
-                            }`}
+                              }`}
                           >
                             {slot.label}
                           </button>
@@ -1622,15 +1617,15 @@ function PackageContent() {
                       </p>
                     </div>
                   )}
-                  
+
                   <div className="flex items-center justify-end gap-3 pt-4">
-                    <button 
+                    <button
                       onClick={() => setCurrentStep(1)}
                       className="px-5 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
                     >
                       Back
                     </button>
-                    <button 
+                    <button
                       onClick={handleContinue}
                       className="px-6 py-2.5 bg-[#007AFF] text-white font-semibold rounded-lg hover:bg-[#0052FF] transition-colors shadow-md"
                     >
@@ -1639,12 +1634,12 @@ function PackageContent() {
                   </div>
                 </div>
               )}
-              
+
               {/* Step 3: Patient Details */}
               {currentStep === 3 && (
                 <div>
                   <h2 className="text-lg font-bold text-gray-900 mb-4">Patient Details</h2>
-                  
+
                   <div className="mb-5">
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                       Booking For <span className="text-red-500">*</span>
@@ -1778,13 +1773,13 @@ function PackageContent() {
                   </div>
 
                   <div className="flex items-center justify-end gap-3 pt-4">
-                    <button 
+                    <button
                       onClick={() => setCurrentStep(2)}
                       className="px-5 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
                     >
                       Back
                     </button>
-                    <button 
+                    <button
                       onClick={handleContinue}
                       className="px-6 py-2.5 bg-[#007AFF] text-white font-semibold rounded-lg hover:bg-[#0052FF] transition-colors shadow-md"
                     >
@@ -1793,12 +1788,12 @@ function PackageContent() {
                   </div>
                 </div>
               )}
-              
+
               {/* Step 4: Review & Confirm (before success) */}
               {currentStep === 4 && !bookingConfirmed && (
                 <div>
                   <h2 className="text-lg font-bold text-gray-900 mb-4">Review & Confirm Booking</h2>
-                  
+
                   <div className="space-y-4 mb-6">
                     <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
                       <h3 className="text-sm font-semibold text-gray-600 mb-2">Package Details</h3>
@@ -1869,13 +1864,13 @@ function PackageContent() {
                   </div>
 
                   <div className="flex items-center justify-end gap-3 pt-4">
-                    <button 
+                    <button
                       onClick={() => setCurrentStep(3)}
                       className="px-5 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
                     >
                       Back
                     </button>
-                    <button 
+                    <button
                       onClick={handleConfirmBooking}
                       className="px-6 py-2.5 bg-[#007AFF] text-white font-semibold rounded-lg hover:bg-[#0052FF] transition-colors shadow-md"
                     >
@@ -1901,7 +1896,7 @@ function PackageContent() {
                       <p className="text-sm font-medium mb-2 opacity-90">Your Coupon Code</p>
                       <div className="flex items-center justify-center gap-3">
                         <span className="text-2xl font-bold tracking-widest">{couponCode}</span>
-                        <button 
+                        <button
                           onClick={() => {
                             navigator.clipboard.writeText(couponCode);
                             alert('Coupon code copied to clipboard!');
@@ -1945,13 +1940,13 @@ function PackageContent() {
                   </div>
 
                   <div className="flex flex-col gap-3">
-                    <button 
+                    <button
                       onClick={() => router.push('/Patients/Dashboard/upcoming')}
                       className="w-full bg-[#007AFF] hover:bg-[#0052FF] text-white font-semibold py-3 px-6 rounded-lg transition-colors shadow-sm"
                     >
                       View My Bookings
                     </button>
-                    <button 
+                    <button
                       onClick={() => {
                         handleCloseModal();
                         router.push('/Patients/FindTests');

@@ -12,7 +12,7 @@ import PackagesPage from './Packages/page';
 import AdvertisementPage from './Advertisment/page';
 import CouponManagementPage from './CouponMangement/page';
 import AnalyticsPage from './Analytics/page';
-import AdminManagement from './AdminManagement/page';
+import AdminManagement from './Adminmanagement/page';
 import SupportPage from './Support/page';
 
 // --- Airy & Modern Icons ---

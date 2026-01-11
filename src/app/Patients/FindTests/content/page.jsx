@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Navbar from '../../page';
-import Footer from '../../footer/page';
+import Footer from '../../Footer/page';
 import { withAuth } from '../../../utils/authGuard';
 import AdvertisementBanner from '../../../components/AdvertisementBanner';
 

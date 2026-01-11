@@ -7,7 +7,7 @@ import {
   Phone, Globe, Zap
 } from 'lucide-react';
 import Navbar from '../page';
-import Footer from '../footer/page';
+import Footer from '../Footer/page';
 import { useRouter } from 'next/navigation';
 import { withAuth } from '../../utils/authGuard';
 
