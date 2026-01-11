@@ -1,0 +1,731 @@
+@import "tailwindcss";
+
+body {
+  background: #ffffff;
+}
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.13 0.028 261.692);
+  --primary: oklch(0.21 0.034 264.665);
+
+  /* 6-Color Sage Green Palette */
+  --sage-50: #00CCFF;
+  /* Lightest - backgrounds, cards */
+  --sage-100: #00CCFF;
+  /* Light - secondary backgrounds */
+  --sage-200: #00A3FF;
+  /* Medium-light - borders, dividers */
+  --sage-300: #00A3FF;
+  /* Medium - body text, icons */
+  --sage-400: #007AFF;
+  /* Medium-dark - buttons, primary actions */
+  --sage-500: #0052FF;
+  /* Dark - headings, hover states */
+
+  /* Semantic Color Mapping */
+  --bg-primary: #00CCFF;
+  --bg-secondary: #00CCFF;
+  --bg-tertiary: #00A3FF;
+
+  --text-heading: #0052FF;
+  --text-body: #00A3FF;
+  --text-muted: #00A3FF;
+
+  --btn-primary: #007AFF;
+  --btn-hover: #0052FF;
+  --btn-secondary: #00CCFF;
+
+  --border-light: #00CCFF;
+  --border-medium: #00A3FF;
+  --border-dark: #00A3FF;
+
+  --link-color: #007AFF;
+  --link-hover: #0052FF;
+
+  /* Legacy variable names (for compatibility) */
+  --primary-dark: #0052FF;
+  --deep-black: #000000;
+  --rich-orange: #007AFF;
+  --light-orange: #00A3FF;
+  --golden: #00CCFF;
+  --accent-orange: #007AFF;
+  --pure-white: #ffffff;
+
+  --muted: oklch(0.967 0.003 264.542);
+  --border: oklch(0.928 0.006 264.531);
+  --ring: oklch(0.707 0.022 261.325);
+  --radius: 0.625rem;
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.13 0.028 261.692);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.13 0.028 261.692);
+  --primary-foreground: oklch(0.985 0.002 247.839);
+  --secondary: oklch(0.967 0.003 264.542);
+  --secondary-foreground: oklch(0.21 0.034 264.665);
+  --muted-foreground: oklch(0.551 0.027 264.364);
+  --accent: oklch(0.967 0.003 264.542);
+  --accent-foreground: oklch(0.21 0.034 264.665);
+  --destructive: oklch(0.577 0.245 27.325);
+  --input: oklch(0.928 0.006 264.531);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0.002 247.839);
+  --sidebar-foreground: oklch(0.13 0.028 261.692);
+  --sidebar-primary: oklch(0.21 0.034 264.665);
+  --sidebar-primary-foreground: oklch(0.985 0.002 247.839);
+  --sidebar-accent: oklch(0.967 0.003 264.542);
+  --sidebar-accent-foreground: oklch(0.21 0.034 264.665);
+  --sidebar-border: oklch(0.928 0.006 264.531);
+  --sidebar-ring: oklch(0.707 0.022 261.325);
+}
+
+/* Reset and base styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Main container for the split layout */
+.auth-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  align-items: center;
+  /* vertically center the two panels */
+}
+
+/* Centered single-panel variant */
+.auth-centered {
+  display: flex;
+  min-height: 100dvh;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  background: var(--pure-white);
+  padding: 1.5rem;
+}
+
+/* Left side - Abstract composition */
+.abstract-left {
+  flex: 1;
+  position: relative;
+  background: linear-gradient(135deg, #0b0b0b 0%, #1a1a1a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Flowing curve element */
+.flowing-curve {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 200px;
+  height: 600px;
+  z-index: 2;
+}
+
+.curve-band {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  height: 100%;
+  border-radius: 50% 0 0 50%;
+}
+
+.curve-band-1 {
+  background: linear-gradient(90deg, var(--light-orange) 0%, transparent 100%);
+  width: 200px;
+  height: 600px;
+  animation: curveFloat 8s ease-in-out infinite;
+}
+
+.curve-band-2 {
+  background: linear-gradient(90deg, var(--accent-orange) 0%, transparent 100%);
+  width: 160px;
+  height: 500px;
+  animation: curveFloat 8s ease-in-out infinite 1s;
+}
+
+.curve-band-3 {
+  background: linear-gradient(90deg, var(--golden) 0%, transparent 100%);
+  width: 120px;
+  height: 400px;
+  animation: curveFloat 8s ease-in-out infinite 2s;
+}
+
+.curve-band-4 {
+  background: linear-gradient(90deg, var(--rich-orange) 0%, transparent 100%);
+  width: 80px;
+  height: 300px;
+  animation: curveFloat 8s ease-in-out infinite 3s;
+}
+
+@keyframes curveFloat {
+
+  0%,
+  100% {
+    transform: translateY(-50%) scale(1) rotate(0deg);
+    filter: brightness(1) blur(0px);
+  }
+
+  50% {
+    transform: translateY(-50%) scale(1.05) rotate(2deg);
+    filter: brightness(1.2) blur(1px);
+  }
+}
+
+/* Glowing orb effect */
+.glow-orb {
+  position: absolute;
+  top: 20%;
+  left: 30%;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, var(--rich-orange) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(20px);
+  animation: orbGlow 6s ease-in-out infinite;
+  z-index: 1;
+}
+
+@keyframes orbGlow {
+
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+    box-shadow: 0 0 40px var(--neon-cyan);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+    box-shadow: 0 0 60px var(--neon-cyan), 0 0 100px var(--vibrant-cyan);
+  }
+}
+
+/* Floating particles */
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--rich-orange);
+  border-radius: 50%;
+  animation: particleFloat 10s linear infinite;
+}
+
+.particle:nth-child(1) {
+  top: 15%;
+  left: 20%;
+  animation-delay: 0s;
+}
+
+.particle:nth-child(2) {
+  top: 35%;
+  left: 15%;
+  animation-delay: 2s;
+}
+
+.particle:nth-child(3) {
+  top: 55%;
+  left: 25%;
+  animation-delay: 4s;
+}
+
+.particle:nth-child(4) {
+  top: 75%;
+  left: 20%;
+  animation-delay: 6s;
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translateY(0px) translateX(0px);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-100px) translateX(50px);
+    opacity: 0;
+  }
+}
+
+/* Right side - Forms */
+.forms-right {
+  flex: 1;
+  background: var(--pure-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  position: relative;
+}
+
+/* Form container styling */
+.formContainer {
+  max-width: 360px;
+  width: 100%;
+  margin: auto;
+  /* center horizontally within its parent */
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 122, 24, 0.06);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Smaller form variant */
+.formContainer.small {
+  max-width: 450px;
+  padding: 1rem 1.25rem;
+}
+
+.formContainer.small h1 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.formContainer.small .formSection {
+  gap: 0.7rem;
+}
+
+.formContainer.small .formSection input[type="text"],
+.formContainer.small .formSection input[type="email"],
+.formContainer.small .formSection input[type="password"] {
+  padding: 0.55rem 0.7rem;
+  padding-right: 2.1rem;
+  font-size: 0.8rem;
+}
+
+.formContainer.small .formSection button[type="submit"] {
+  padding: 0.65rem 0.9rem;
+  font-size: 0.8rem;
+  margin-top: 0.75rem;
+}
+
+.formContainer.small a {
+  margin-top: 1rem;
+  padding: 0.7rem;
+  font-size: 0.8rem;
+}
+
+.formContainer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--rich-orange), var(--golden), var(--light-orange));
+  box-shadow: 0 0 20px rgba(255, 122, 24, 0.35);
+}
+
+.formContainer h1 {
+  margin: 0 0 2rem 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--deep-black) 0%, var(--rich-orange) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+  letter-spacing: -0.025em;
+}
+
+.formSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.formSection h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--deep-black);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+  padding-left: 12px;
+}
+
+.formSection h3::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 16px;
+  background: linear-gradient(180deg, var(--rich-orange), var(--golden));
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(255, 122, 24, 0.25);
+}
+
+.formSection input[type="text"],
+.formSection input[type="email"],
+.formSection input[type="password"] {
+  width: 100%;
+  padding: 0.75rem 0.875rem;
+  padding-right: 2.5rem;
+  border: 2px solid rgba(255, 122, 24, 0.08);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--deep-black);
+  font-size: 0.85rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.formSection input::placeholder {
+  color: rgba(59, 130, 246, 0.5);
+}
+
+.formSection input:focus {
+  border-color: var(--rich-orange);
+  background: rgba(255, 255, 255, 1);
+  box-shadow:
+    0 0 0 6px rgba(255, 122, 24, 0.06),
+    0 8px 25px rgba(0, 0, 0, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Password field container */
+.formSection .relative {
+  position: relative;
+}
+
+/* Eye icon button styling */
+.formSection .relative button {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 122, 24, 0.08);
+  border: 1px solid rgba(255, 122, 24, 0.12);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.formSection .relative button:hover {
+  background: rgba(255, 122, 24, 0.16);
+  border-color: var(--rich-orange);
+  box-shadow: 0 0 18px rgba(255, 122, 24, 0.25);
+}
+
+.formSection .relative button svg {
+  width: 18px;
+  height: 18px;
+  color: var(--deep-black);
+  transition: color 0.3s ease;
+}
+
+.formSection .relative button:hover svg {
+  color: var(--neon-cyan);
+}
+
+/* Submit button */
+.formSection button[type="submit"] {
+  margin-top: 1.25rem;
+  width: 100%;
+  padding: 0.875rem 1.25rem;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--rich-orange) 0%, var(--accent-orange) 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.025em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+}
+
+.formSection button[type="submit"]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.15),
+      transparent);
+  transition: left 0.6s ease;
+}
+
+.formSection button[type="submit"]:hover::before {
+  left: 100%;
+}
+
+.formSection button[type="submit"]:hover {
+  background: linear-gradient(135deg, var(--accent-orange) 0%, var(--golden) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 122, 24, 0.18);
+}
+
+/* Link styling */
+.formContainer a {
+  display: inline-block;
+  margin-top: 1.5rem;
+  color: var(--deep-black);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.875rem;
+  text-align: center;
+  width: 100%;
+  padding: 0.875rem;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  background: rgba(255, 122, 24, 0.04);
+  border: 1px solid rgba(255, 122, 24, 0.08);
+}
+
+.formContainer a:hover {
+  color: var(--rich-orange);
+  background: rgba(255, 122, 24, 0.08);
+  border-color: var(--rich-orange);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(255, 122, 24, 0.12);
+}
+
+/* Error message styling */
+.formSection .error-text {
+  color: #dc2626;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  padding: 0.75rem;
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  border-radius: 8px;
+  border-left: 3px solid #dc2626;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .auth-container {
+    flex-direction: column;
+  }
+
+  .abstract-left {
+    height: 200px;
+    flex: none;
+  }
+
+  .flowing-curve {
+    width: 150px;
+    height: 400px;
+  }
+
+  .curve-band-1 {
+    width: 150px;
+    height: 400px;
+  }
+
+  .curve-band-2 {
+    width: 120px;
+    height: 320px;
+  }
+
+  .curve-band-3 {
+    width: 90px;
+    height: 240px;
+  }
+
+  .curve-band-4 {
+    width: 60px;
+    height: 180px;
+  }
+
+  .forms-right {
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .formContainer {
+    padding: 2rem 1.5rem;
+    margin: 0;
+    width: calc(100% - 2rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .formContainer {
+    padding: 1.5rem 1rem;
+  }
+
+  .formContainer h1 {
+    font-size: 1.75rem;
+  }
+
+  .formSection input[type="text"],
+  .formSection input[type="email"],
+  .formSection input[type="password"] {
+    padding: 0.75rem 0.875rem;
+    padding-right: 2.5rem;
+  }
+
+  .formSection button[type="submit"] {
+    padding: 0.875rem 1.25rem;
+  }
+}
+
+.dark {
+  --background: oklch(0.13 0.028 261.692);
+  --foreground: oklch(0.985 0.002 247.839);
+  --card: oklch(0.21 0.034 264.665);
+  --card-foreground: oklch(0.985 0.002 247.839);
+  --popover: oklch(0.21 0.034 264.665);
+  --popover-foreground: oklch(0.985 0.002 247.839);
+  --primary: oklch(0.928 0.006 264.531);
+  --primary-foreground: oklch(0.21 0.034 264.665);
+  --secondary: oklch(0.278 0.033 256.848);
+  --secondary-foreground: oklch(0.985 0.002 247.839);
+  --muted: oklch(0.278 0.033 256.848);
+  --muted-foreground: oklch(0.707 0.022 261.325);
+  --accent: oklch(0.278 0.033 256.848);
+  --accent-foreground: oklch(0.985 0.002 247.839);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.551 0.027 264.364);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.21 0.034 264.665);
+  --sidebar-foreground: oklch(0.985 0.002 247.839);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0.002 247.839);
+  --sidebar-accent: oklch(0.278 0.033 256.848);
+  --sidebar-accent-foreground: oklch(0.985 0.002 247.839);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.551 0.027 264.364);
+}
+
+/* Scrollbar styling for Up Next section */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #c5c5c5;
+  border-radius: 10px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
+}
+
+/* FINAL CURSOR STYLES - Placed at the end to ensure maximum override */
+* {
+  cursor: default !important;
+}
+
+input,
+textarea,
+select,
+[contenteditable] {
+  cursor: text !important;
+}
+
+button,
+a,
+[role="button"],
+label {
+  cursor: pointer !important;
+}
+
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
+  cursor: not-allowed !important;
+}
+
+/* Ensure radio buttons and checkboxes use default cursor */
+input[type="radio"],
+input[type="checkbox"] {
+  cursor: default !important;
+}
+
+/* Ensure labels for radio buttons and checkboxes use default cursor */
+label:has(input[type="radio"]),
+label:has(input[type="checkbox"]) {
+  cursor: default !important;
+}
+
+/* Fallback for browsers that don't support :has() */
+input[type="radio"]+label,
+input[type="checkbox"]+label {
+  cursor: default !important;
+}
+
+/* Tailwind utility overrides */
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
+.cursor-text {
+  cursor: text !important;
+}
+
+.cursor-not-allowed {
+  cursor: not-allowed !important;
+}
+
+.cursor-help {
+  cursor: help !important;
+}
+
+.cursor-move {
+  cursor: move !important;
+}
+
+.cursor-wait {
+  cursor: wait !important;
+}
