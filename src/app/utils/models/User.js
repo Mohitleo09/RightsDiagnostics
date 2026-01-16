@@ -151,6 +151,18 @@ const UserSchema = new mongoose.Schema({
   verifyTokenExpire: {
     type: Date,
   },
+  // Auth Provider fields
+  googleId: {
+    type: String,
+    unique: true,
+    sparse: true,
+    required: false,
+  },
+  authProvider: {
+    type: String,
+    enum: ['credentials', 'google', 'otp'],
+    default: 'credentials',
+  },
 }, {
   timestamps: true, // Adds createdAt and updatedAt automatically
 });

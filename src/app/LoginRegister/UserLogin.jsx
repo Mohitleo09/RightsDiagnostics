@@ -4,7 +4,8 @@ import React, { useState, useEffect } from "react";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
-import { signIn, signOut, useSession } from 'next-auth/react'; // Import signOut and useSession
+import { useSession } from 'next-auth/react'; // Import useSession
+import Script from 'next/script'; // Import Script for Google GSI
 
 const UserLogin = () => {
   const [loginType, setLoginType] = useState("email");
@@ -253,26 +254,105 @@ const UserLogin = () => {
     }
   };
 
-  // Handle Google login
-  const handleGoogleLogin = async () => {
+  // Handle Google login (Manual Flow)
+  const handleGoogleCallback = async (response) => {
+    console.log('Google callback received:', response);
+
+    if (!response.credential) {
+      toast.error('Google login failed: No credential received');
+      return;
+    }
+
     setLoading(true);
     try {
-      console.log('Initiating Google login...');
-
-      // Redirect to Google OAuth flow - this will prompt account selection
-      const result = await signIn('google', {
-        callbackUrl: '/Patients/Dashboard',
-        redirect: true
+      // Step 4: Frontend sends Google token to YOUR backend
+      const res = await fetch('/api/auth/google-login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token: response.credential }),
       });
 
-      console.log('Google login result:', result);
+      const data = await res.json();
 
+      if (data.success && data.token) {
+        // Step 8: Frontend stores YOUR JWT
+        localStorage.setItem('authToken', data.token); // Store app specific token
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('user', JSON.stringify(data.user));
+
+        // Also store individual fields for compatibility with existing code
+        if (data.user) {
+          localStorage.setItem('userName', data.user.username || data.user.name || 'User');
+          localStorage.setItem('userEmail', data.user.email || '');
+          if (data.user.phone) localStorage.setItem('userPhone', data.user.phone);
+        }
+
+        toast.success('Login successful!');
+
+        // Dispatch events
+        window.dispatchEvent(new CustomEvent('userLoggedIn'));
+        window.dispatchEvent(new CustomEvent('usernameUpdated', {
+          detail: { userName: data.user.username || data.user.name || 'User' }
+        }));
+
+        // Redirect
+        const searchParams = new URLSearchParams(window.location.search);
+        const callbackUrl = searchParams.get('callbackUrl');
+
+        if (callbackUrl) {
+          router.push(callbackUrl);
+        } else {
+          router.push('/Patients/Dashboard');
+        }
+      } else {
+        console.error('Backend verification failed:', data);
+        toast.error(data.message || 'Google login failed');
+      }
     } catch (error) {
-      console.error("Google login error:", error);
-      toast.error("Google login failed. Please try again.");
+      console.error('Google login error using manual flow:', error);
+      toast.error('An error occurred during Google login');
+    } finally {
       setLoading(false);
     }
   };
+
+  // Initialize Google Button
+  useEffect(() => {
+    // Check if Google script is loaded
+    const initializeGoogle = () => {
+      if (window.google && window.google.accounts) {
+        window.google.accounts.id.initialize({
+          client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "569234449893-tpk8pgaa31u78f6afabi6i2g1isdvpvq.apps.googleusercontent.com", // Replace with actual Client ID or use process.env via a prop if possible, but env vars in client components need NEXT_PUBLIC_
+          callback: handleGoogleCallback,
+          auto_select: false,
+          cancel_on_tap_outside: true,
+        });
+
+        // Render the Google Sign-In button
+        const buttonDiv = document.getElementById("googleSignInBtn");
+        if (buttonDiv) {
+          window.google.accounts.id.renderButton(
+            buttonDiv,
+            { theme: "outline", size: "large", width: "100%" }  // Customization attributes
+          );
+        }
+      }
+    };
+
+    // Attempt to initialize immediately if script is already there
+    initializeGoogle();
+
+    // Also set up a listener or interval in case script loads later (though Script onLoad handles this usually)
+    const interval = setInterval(() => {
+      if (window.google && window.google.accounts && document.getElementById("googleSignInBtn")?.innerHTML === "") {
+        initializeGoogle();
+      }
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, []);
 
   // Handle send OTP for phone verification
   const handleSendOtp = async () => {
@@ -1242,33 +1322,27 @@ const UserLogin = () => {
               )}
 
               {/* Google Sign In Button */}
-              {/* <div className="mt-6">
-                <button
-                  onClick={handleGoogleLogin}
-                      disabled={loading}
-                      className="w-full flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 md:py-3 hover:bg-gray-50 transition text-sm md:text-base"
-                    >
-                      <svg className="w-5 h-5" viewBox="0 0 24 24">
-                        <path
-                          d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                          fill="#4285F4"
-                        />
-                        <path
-                          d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                          fill="#34A853"
-                        />
-                        <path
-                          d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                          fill="#FBBC05"
-                        />
-                        <path
-                          d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                          fill="#EA4335"
-                        />
-                      </svg>
-                      <span>{loading ? "Logging in with Google..." : "Continue with Google"}</span>
-                    </button>
-                  </div> */}
+              <div className="mt-6">
+                <div
+                  id="googleSignInBtn"
+                  className="w-full h-[40px] md:h-[48px] flex justify-center"
+                ></div>
+                {/* Fallback/Invisible Script Loading */}
+                <Script
+                  src="https://accounts.google.com/gsi/client"
+                  strategy="afterInteractive"
+                  onLoad={() => {
+                    if (window.google && window.google.accounts) {
+                      window.google.accounts.id.initialize({
+                        client_id: "812227745202-1oe4d5egbaisvu0dvls5bjqkcvg9q8tj.apps.googleusercontent.com", // Forced to hardcoded ID to ensure immediate fix without server restart
+                        callback: handleGoogleCallback
+                      });
+                      const btn = document.getElementById("googleSignInBtn");
+                      if (btn) window.google.accounts.id.renderButton(btn, { theme: "outline", size: "large", width: "100%" });
+                    }
+                  }}
+                />
+              </div>
             </>
           )}
 
